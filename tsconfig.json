@@ -28,7 +28,8 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/shared/libs/logger/index.js"
   ],
   "exclude": [
     "node_modules",
