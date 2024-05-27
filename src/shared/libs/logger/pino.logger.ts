@@ -6,7 +6,7 @@ import { injectable } from 'inversify';
 
 
 @injectable()
-export  class PinoLogger implements LoggerInterface{
+export class PinoLogger implements LoggerInterface{
   private logger!: PinoInstance;
 
   constructor() {
@@ -26,8 +26,8 @@ export  class PinoLogger implements LoggerInterface{
       }] ,
     });
 
-    this.logger =pino({}, multiTransport);
-    this.logger.info('Logger created…');
+    this.logger = pino({}, multiTransport);
+    this.logger.info('Logger created...');
   }
 
 

@@ -10,3 +10,6 @@
 coverage
 *.log
 *.env
+/mongodb/
+/upload/
+/buy-and-sell-data/

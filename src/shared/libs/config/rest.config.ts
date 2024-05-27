@@ -2,12 +2,12 @@
 import { config} from 'dotenv';
 import { LoggerInterface } from '../logger/index.js';
 import { ConfigInterface } from './config.interface.js';
-import {configRestSchema,  RestSchema } from './rest.schema.js';
+import {configRestSchema, RestSchema } from './rest.schema.js';
 import { inject, injectable } from 'inversify';
 import { Component } from '../../types/component.enum.js';
 
 @injectable()
-export  class  RestConfig implements ConfigInterface<RestSchema>{
+export class RestConfig implements ConfigInterface<RestSchema>{
   private readonly config: RestSchema;
 
   constructor(

@@ -1,6 +1,7 @@
-export * from './category.type';
-export * from './component.enum';
-export * from './mock-data.type';
-export * from './offer-type.enum';
-export * from './offer.type';
-export * from './user.type';
+export * from './category.type.js';
+export * from './component.enum.js';
+export * from './mock-data.type.js';
+export * from './offer-type.enum.js';
+export * from './offer.type.js';
+export * from './user.type.js';
+
