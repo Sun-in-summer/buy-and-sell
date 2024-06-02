@@ -24,6 +24,7 @@ export class UserController extends BaseController {
     super(logger);
     this.logger.info('Register routes for UserController...');
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
   }
 
 
@@ -46,7 +47,9 @@ export class UserController extends BaseController {
   }
 
 
-  private async login({body}:LoginUserRequest, res: Response): Promise<void>{
+  public async login(
+    {body}:LoginUserRequest,
+    _res: Response): Promise<void>{
     const existUser = await this.userService.findByEmail(body.email);
     if(!existUser) {
       throw new HttpError(
