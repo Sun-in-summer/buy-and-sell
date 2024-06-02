@@ -1,13 +1,14 @@
+import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
-import { CategoryService } from './category-service.interface.js';
+import { CategoryServiceInterface } from './category-service.interface.js';
 import { CategoryEntity } from './category.entity.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
-import { inject } from 'inversify';
-import { Component } from '../../types/index.js';
+import { Component, SortType } from '../../types/index.js';
 import { LoggerInterface } from '../../libs/logger/logger.interface.js';
+import { MAX_CATEGORIES_COUNT } from './category.constant.js';
 
-
-export class DefaultCategoryService implements CategoryService {
+@injectable()
+export class DefaultCategoryService implements CategoryServiceInterface {
   constructor(
     @inject(Component.LoggerInterface) private readonly logger: LoggerInterface,
 @inject(Component.CategoryModel) private readonly categoryModel: types.ModelType<CategoryEntity>
@@ -35,5 +36,28 @@ export class DefaultCategoryService implements CategoryService {
     }
 
     return this.create(dto);
+  }
+
+  public async find(): Promise<DocumentType<CategoryEntity>[]> {
+    return this.categoryModel
+      .aggregate([
+        {
+          $lookup: {
+            from: 'offers',
+            let: { categoryId: '$_id'},
+            pipeline: [
+              { $match: { $expr: { $in: ['$$categoryId', '$categories'] } } },
+              { $project: { _id: 1}}
+            ],
+            as: 'offers'
+          },
+        },
+        { $addFields:
+            { id: { $toString: '$_id'}, offerCount: { $size: '$offers'} }
+        },
+        { $unset: 'offers' },
+        { $limit: MAX_CATEGORIES_COUNT },
+        { $sort: { offerCount: SortType.Down } }
+      ]).exec();
   }
 }

@@ -4,10 +4,19 @@ import RestApplication from './rest/rest-application.js';
 import { Component } from './shared/types/component.enum.js';
 import { createRestApplicationContainer } from './rest/rest.container.js';
 import { createUserContainer } from './shared/modules/user/index.js';
+import { createOfferContainer } from './shared/modules/offer/offer.container.js';
+import { createCommentContainer } from './shared/modules/comment/comment.container.js';
+import { createCategoryContainer } from './shared/modules/category/category.container.js';
 
 
 async function bootstrap () {
-  const appContainer = Container.merge(createRestApplicationContainer(), createUserContainer());
+  const appContainer = Container.merge(
+    createRestApplicationContainer(),
+    createUserContainer(),
+    createOfferContainer(),
+    createCommentContainer(),
+    createCategoryContainer(),
+  );
 
 
   const application = appContainer.get<RestApplication>(Component.RestApplication);
