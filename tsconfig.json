@@ -29,7 +29,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/shared/libs/logger/index.js"
+    "src/shared/libs/logger/index.js",
+    "custom.d.ts"
   ],
   "exclude": [
     "node_modules",
@@ -37,5 +38,8 @@
   ],
   "ts-node": {
     "esm": true
-  }
+  },
+  "files": [
+    "./custom.d.ts"
+  ]
 }

@@ -5,7 +5,8 @@ import { CategoryEntity } from './category.entity.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { Component, SortType } from '../../types/index.js';
 import { LoggerInterface } from '../../libs/logger/logger.interface.js';
-import { MAX_CATEGORIES_COUNT } from './category.constant.js';
+import { DEFAULT_CATEGORIES_IMAGES, MAX_CATEGORIES_COUNT } from './category.constant.js';
+import { getRandomItem } from '../../../utils/random.js';
 
 @injectable()
 export class DefaultCategoryService implements CategoryServiceInterface {
@@ -15,7 +16,8 @@ export class DefaultCategoryService implements CategoryServiceInterface {
   ) {}
 
   public async create(dto: CreateCategoryDto): Promise<DocumentType<CategoryEntity>> {
-    const result = await this.categoryModel.create(dto);
+    const randomCategoryImage = getRandomItem(DEFAULT_CATEGORIES_IMAGES);
+    const result = await this.categoryModel.create({ ...dto, image: randomCategoryImage });
     this.logger.info(`New category created: ${dto.name}`);
     return result;
   }

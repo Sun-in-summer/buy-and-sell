@@ -26,3 +26,22 @@ Content-Type: application/json
 }
 
 ###
+## Проверить токен пользователя
+GET http://localhost:4000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJmaXJzdG5hbWUiOiJKYWNrIiwibGFzdG5hbWUiOiJUb3JyYW5jZSIsImlkIjoiNjY1Y2VlNzkyNWNlNTIwMzM2YzQ3ZmEyIiwiaWF0IjoxNzE3OTI4Njk3LCJleHAiOjE3MTgxMDE0OTd9.Lu0hL1RR23HbeBExJiIb-oQ6ocsbLdkrloSd6zBJseQ
+
+###
+## Отправить изображение
+
+POST http://localhost:4000/users/665cee7925ce520336c47fa2/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="screen.png"
+Content-Type: image/png
+
+< /Users/user/Pictures/1.jpg
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+##

@@ -13,3 +13,5 @@ coverage
 /mongodb/
 /upload/
 /buy-and-sell-data/
+/tmp/
+/uploadStorage/

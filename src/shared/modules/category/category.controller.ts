@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { LoggerInterface } from '../../libs/logger/logger.interface.js';
-import { BaseController, HttpError, HttpMethod } from '../../libs/rest/index.js';
+import { BaseController, HttpError, HttpMethod, PrivateRouteMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
 import { Component } from '../../types/index.js';
 import { Request, Response } from 'express';
 import { CategoryServiceInterface } from './category-service.interface.js';
@@ -8,6 +8,12 @@ import { fillDTO } from '../../helpers/common.js';
 import { CategoryRdo } from './rdo/category.rdo.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { StatusCodes } from 'http-status-codes';
+import { OfferServiceInterface } from '../offer/offer-service.interface.js';
+import { OfferRdo } from '../offer/index.js';
+import { ParamCategoryId } from './type/param-categoryId.type.js';
+import { RequestQuery } from '../../libs/rest/types/request-query.type.js';
+import { ValidateDtoMiddleware } from '../../libs/rest/middleware/validate-dto.middleware.js';
+
 
 @injectable()
 export class CategoryController extends BaseController{
@@ -15,14 +21,30 @@ export class CategoryController extends BaseController{
   constructor(
     @inject(Component.LoggerInterface) protected readonly logger: LoggerInterface,
     @inject(Component.CategoryService) private readonly categoryService: CategoryServiceInterface,
+    @inject(Component.OfferService) private readonly offerService: OfferServiceInterface,
   ){
     super(logger);
 
     this.logger.info('Register routes for CategoryController...');
-
-    this.addRoute({path: '/', method: HttpMethod.Get, handler: this.index});
-
-    this.addRoute({path: '/', method: HttpMethod.Post, handler: this.create});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.index});
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(CreateCategoryDto)
+      ]});
+    this.addRoute({
+      path: '/:categoryId/offers',
+      method: HttpMethod.Get,
+      handler: this.getOffersFromCategory,
+      middlewares: [
+        new ValidateObjectIdMiddleware('categoryId')
+      ] });
 
   }
 
@@ -47,5 +69,12 @@ export class CategoryController extends BaseController{
     this.created(res, fillDTO(CategoryRdo, result));
   }
 
+  public async getOffersFromCategory(
+    { params, query } : Request<ParamCategoryId, unknown, unknown, RequestQuery>,
+    res: Response,
+  ):Promise<void> {
+    const offers = await this.offerService.findByCategoryId(params.categoryId, query.limit);
+    this.ok(res, fillDTO(OfferRdo, offers));
+  }
 
 }

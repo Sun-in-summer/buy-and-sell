@@ -7,6 +7,7 @@ import { createUserContainer } from './shared/modules/user/index.js';
 import { createOfferContainer } from './shared/modules/offer/offer.container.js';
 import { createCommentContainer } from './shared/modules/comment/comment.container.js';
 import { createCategoryContainer } from './shared/modules/category/category.container.js';
+import { createAuthContainer } from './shared/modules/auth/auth.container.js';
 
 
 async function bootstrap () {
@@ -16,6 +17,7 @@ async function bootstrap () {
     createOfferContainer(),
     createCommentContainer(),
     createCategoryContainer(),
+    createAuthContainer(),
   );
 
 
